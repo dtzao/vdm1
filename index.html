@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Registro</title>
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: Arial, sans-serif;
+      background:#111;
+      color:#fff;
+      padding:20px;
+    }
+    .card{
+      width:100%;
+      max-width:520px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:16px;
+      padding:18px;
+    }
+    h1{ margin:0 0 8px; font-size:20px; }
+    p{ margin:0 0 16px; opacity:.85; line-height:1.35; }
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap; }
+    label{ display:block; font-size:12px; opacity:.85; margin:10px 0 6px; }
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(0,0,0,.25);
+      color:#fff;
+      outline:none;
+    }
+    input:focus{ border-color:#ff0000; }
+
+    button{
+      cursor:pointer;
+      font-weight:800;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.2);
+      color:#fff;
+      background:transparent;
+    }
+    button.primary{
+      background:#ff0000;
+      border-color:#ff0000;
+    }
+    button:hover{ opacity:.9; }
+
+    .buttons{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    a{
+      display:inline-block;
+      text-decoration:none;
+      font-weight:800;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.2);
+      color:#fff;
+      opacity:.45;
+      pointer-events:none;
+    }
+    a.primary{
+      background:#ff0000;
+      border-color:#ff0000;
+    }
+
+    .footer{
+      margin-top:14px;
+      font-size:12px;
+      opacity:.7;
+    }
+    .msg{
+      margin-top:10px;
+      font-size:13px;
+      opacity:.9;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>📌 Sistema de Registro</h1>
+    <p>Faça login para acessar as páginas.</p>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="row">
+        <div style="flex:1; min-width:180px;">
+          <label for="usuario">Usuário</label>
+          <input id="usuario" type="text" placeholder="Ex: VDM" required />
+        </div>
+        <div style="flex:1; min-width:180px;">
+          <label for="senha">Senha</label>
+          <input id="senha" type="password" placeholder="Ex: 1234" required />
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" type="submit" id="btnLogin">Entrar</button>
+        <button type="button" id="btnSair">Sair</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+    </form>
+
+    <hr style="margin:16px 0; border:0; border-top:1px solid rgba(255,255,255,.12);" />
+
+    <p>Escolha uma opção para iniciar.</p>
+    <div class="buttons">
+      <a class="primary" id="linkP1" href="pagina1.html">➡️ Ir para Registro (Página 1)</a>
+      <a id="linkP2" href="pagina2.html">📄 Ir para Visualização (Página 2)</a>
+    </div>
+
+    <div class="footer">
+      Dica: se estiver usando GitHub Pages, o arquivo <strong>index.html</strong> é a entrada padrão.
+    </div>
+  </main>
+
+  <script>
+    // LOGIN SIMPLES (front-end). Depois trocamos por Firebase sem refazer o site.
+    const USER_OK = "VDM";
+    const PASS_OK = "1234";
+    const AUTH_KEY = "vdm_auth_ok";
+
+    const form = document.getElementById("loginForm");
+    const usuario = document.getElementById("usuario");
+    const senha = document.getElementById("senha");
+    const msg = document.getElementById("msg");
+    const linkP1 = document.getElementById("linkP1");
+    const linkP2 = document.getElementById("linkP2");
+    const btnSair = document.getElementById("btnSair");
+
+    function setLoggedInUI(isLogged) {
+      if (isLogged) {
+        msg.textContent = "✅ Logado. Acesso liberado.";
+        msg.style.color = "#8aff8a";
+        linkP1.style.opacity = "1";
+        linkP2.style.opacity = "1";
+        linkP1.style.pointerEvents = "auto";
+        linkP2.style.pointerEvents = "auto";
+      } else {
+        msg.textContent = "🔒 Faça login para liberar acesso.";
+        msg.style.color = "#fff";
+        linkP1.style.opacity = ".45";
+        linkP2.style.opacity = ".45";
+        linkP1.style.pointerEvents = "none";
+        linkP2.style.pointerEvents = "none";
+      }
+    }
+
+    // ao abrir a página, verifica se já estava logado
+    setLoggedInUI(localStorage.getItem(AUTH_KEY) === "1");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const u = (usuario.value || "").trim();
+      const p = (senha.value || "").trim();
+
+      if (u === USER_OK && p === PASS_OK) {
+        localStorage.setItem(AUTH_KEY, "1");
+        setLoggedInUI(true);
+        senha.value = "";
+      } else {
+        localStorage.removeItem(AUTH_KEY);
+        setLoggedInUI(false);
+        msg.textContent = "❌ Usuário ou senha incorretos.";
+        msg.style.color = "#ff8a8a";
+      }
+    });
+
+    btnSair.addEventListener("click", () => {
+      localStorage.removeItem(AUTH_KEY);
+      setLoggedInUI(false);
+      usuario.value = "";
+      senha.value = "";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PÁGINA 2 - VISUALIZAÇÃO</title>
+
+<style>
+:root{
+  --bg:#000;
+  --text:#fff;
+  --muted:rgba(255,255,255,.7);
+  --border:rgba(255,255,255,.18);
+  --accent:#ffd400; /* AMARELO */
+  --maxw:820px;
+  --radius:14px;
+  --pad:12px;
+  --font:clamp(16px,1.4vw,22px);
+  --small:clamp(12px,1vw,15px);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  padding:16px;
+  text-transform:uppercase;
+  letter-spacing:.35px;
+}
+
+.container{
+  max-width:var(--maxw);
+  margin:0 auto;
+  text-align:center;
+  padding-bottom:110px; /* espaço para botões/assinatura */
+}
+
+/* ===== LATERAIS (LOGO) ===== */
+.lateral{
+  position: fixed;
+  top: 120px;
+  bottom: 120px;
+  width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+.lateral img{
+  width: 140px;
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,.6));
+}
+.lateral.esquerda{ left: 16px; }
+.lateral.direita{ right: 16px; }
+
+@media (max-width: 900px){
+  .lateral{ display:none; }
+}
+
+/* ===== DATA ===== */
+label{
+  display:block;
+  font-weight:1000;
+  font-size:var(--small);
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.field{
+  width:100%;
+  max-width:360px;
+  margin:0 auto;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#000;
+  color:#fff;
+  font-weight:1000;
+  padding:10px 12px;
+  text-align:center;
+  font-size:var(--font);
+}
+
+/* ===== ALERTAS (ABAIXO DA DATA) ===== */
+.alertas-wrap{
+  width:100%;
+  margin: 12px auto 16px auto;
+  display: grid;
+  gap: 10px;
+}
+
+.alerta-item{
+  background: var(--accent);
+  color:#000;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.25);
+  padding: 10px 12px;
+  font-weight: 1000;
+  font-size: var(--font);
+  white-space: pre-wrap;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.alerta-actions{
+  margin-top: 8px;
+  display:flex;
+  gap: 10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.smallbtn{
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.25);
+  background: #000;
+  color:#fff;
+  font-weight: 1000;
+  cursor:pointer;
+  font-size: var(--small);
+}
+.smallbtn:hover{ opacity:.9; }
+
+.alerta-input{
+  display:none;
+  margin: 12px auto 0 auto;
+  width: 100%;
+  max-width: var(--maxw);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #000;
+  color:#fff;
+  font-weight: 1000;
+  font-size: var(--font);
+  padding: 12px;
+  outline:none;
+  white-space: pre-wrap;
+  text-align: center;
+  min-height: 110px;
+}
+
+.dica{
+  display:none;
+  margin-top: 10px;
+  font-size: var(--small);
+  color: rgba(255,255,255,.8);
+  text-align:center;
+}
+
+/* ===== CARDS ===== */
+.info{
+  margin:12px auto;
+  padding:var(--pad);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+
+.time{
+  font-weight:1000;
+  font-size:var(--font);
+}
+
+.topo{
+  color:var(--accent);
+  font-weight:1000;
+  font-size:var(--small);
+  margin-top:4px;
+}
+
+.meta{
+  margin-top:10px;
+  display:grid;
+  gap:10px;
+  font-size:var(--font);
+}
+
+.meta .line{
+  background:rgba(255,255,255,.05);
+  border-radius:12px;
+  padding:10px;
+}
+
+.meta b{
+  color:var(--accent);
+  display:block;
+  margin-bottom:4px;
+}
+
+/* seleção + seta */
+.sel{
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  font-weight:1000;
+  font-size:var(--small);
+}
+
+.toggle{
+  display:none;
+  padding:8px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#000;
+  color:#fff;
+  font-weight:1000;
+  cursor:pointer;
+}
+
+/* editor */
+.edit-panel{
+  display:none;
+  margin-top:12px;
+  border-top:1px dashed var(--border);
+  padding-top:12px;
+}
+
+.edit-field{
+  width:100%;
+  margin-top:6px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#000;
+  color:#fff;
+  padding:10px;
+  font-weight:1000;
+  text-align:center;
+}
+
+.actions{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
+
+.btn{
+  padding:10px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#000;
+  color:#fff;
+  font-weight:1000;
+  cursor:pointer;
+}
+.btn.primary{border-color:var(--accent)}
+.btn.danger{color:var(--accent)}
+
+/* botões fixos */
+.nav-button{
+  position:fixed;
+  bottom:12px;
+  left:12px;
+  background:#fff;
+  color:#000;
+  font-weight:1000;
+  padding:10px 14px;
+  border-radius:12px;
+  text-decoration:none;
+  z-index: 50;
+}
+
+.delete-button{
+  position:fixed;
+  bottom:12px;
+  right:12px;
+  background:var(--accent);
+  color:#000;
+  font-weight:1000;
+  padding:10px 14px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  z-index: 50;
+}
+
+/* botão alerta */
+.alerta-button{
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.2);
+  background:#000;
+  color:#fff;
+  font-weight:1000;
+  cursor:pointer;
+}
+
+/* ===== ASSINATURA FIXA ===== */
+.assinatura{
+  position: fixed;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,.6);
+  letter-spacing: 0.6px;
+  z-index: 999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* DESTAQUE SUAVE DO REGISTRO SELECIONADO */
+.info.selecionado{
+  outline: 3px solid rgba(255, 212, 0, .75);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(255, 212, 0, .25);
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGOS LATERAIS - PAGINA 2 -->
+<div class="lateral esquerda">
+  <img src="imgb2.png" alt="Logo B Página 2">
+</div>
+<div class="lateral direita">
+  <img src="imgb2.png" alt="Logo B Página 2">
+</div>
+
+<main class="container">
+  <label>DATA</label>
+  <input type="date" id="dataSelecionada" class="field">
+
+  <!-- ALERTAS (APARECEM AQUI) -->
+  <div id="alertasWrap" class="alertas-wrap"></div>
+
+  <!-- INPUT PARA CRIAR/EDITAR ALERTA -->
+  <div id="dicaAtalho" class="dica">ENTER: QUEBRA LINHA | SHIFT+ENTER: FIXAR ALERTA</div>
+  <textarea id="inputAlerta" class="alerta-input" placeholder="DIGITE O ALERTA... (SHIFT+ENTER PARA FIXAR)"></textarea>
+
+  <div id="dados"></div>
+</main>
+
+<a href="pagina1.html" class="nav-button">⬅ REGISTRO</a>
+<button class="alerta-button" type="button" id="btnAbrirAlerta">🚨 ALERTA</button>
+<button class="delete-button" id="btnApagar">🗑 APAGAR</button>
+
+<footer class="assinatura">
+  SISTEMA DE APOIO DESENVOLVIDO: SD PM 154.466-7 ANDERSON SILVA
+</footer>
+
+<!-- ===== FIREBASE + ESPELHAMENTO (TEMPO REAL) ===== -->
+<script type="module">
+  // --------- (0) BLOQUEIO SIMPLES DO SEU INDEX (se estiver usando VDM/1234) ----------
+  const AUTH_KEY = "vdm_auth_ok";
+  if (localStorage.getItem(AUTH_KEY) !== "1") {
+    window.location.href = "index.html";
+  }
+
+  // --------- (1) FIREBASE IMPORTS ----------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFirestore, doc, onSnapshot, runTransaction, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+  // --------- (2) COLE SEU firebaseConfig AQUI ----------
+  const firebaseConfig = {
+    // apiKey: "...",
+    // authDomain: "...",
+    // projectId: "...",
+    // storageBucket: "...",
+    // messagingSenderId: "...",
+    // appId: "..."
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // Documento central compartilhado (DEVE ser o mesmo da Página 1)
+  const stateRef = doc(db, "vdm", "state");
+
+  // Se você ativar Firebase Auth (recomendado), pode exigir login real:
+  onAuthStateChanged(auth, (user) => {
+    // Se ainda não configurou Auth, pode deixar como está (não redireciona).
+    // if (!user) window.location.href = "index.html";
+  });
+
+  // --------- (3) ELEMENTOS / CHAVES ----------
+  const inputData = document.getElementById('dataSelecionada');
+  const dados = document.getElementById('dados');
+
+  const alertasWrap = document.getElementById('alertasWrap');
+  const inputAlerta = document.getElementById('inputAlerta');
+  const btnAbrirAlerta = document.getElementById('btnAbrirAlerta');
+  const dicaAtalho = document.getElementById('dicaAtalho');
+  const btnApagar = document.getElementById('btnApagar');
+
+  const KEY_DATA = 'dataSelecionada';
+  const KEY_REG  = 'registrosPorDia';
+  const KEY_ALERT = 'alertasPorDia';
+
+  let alertaEditIndex = null; // null = novo, número = editando
+
+  // Estado local espelhando o Firestore
+  let appState = {
+    [KEY_DATA]: "",
+    [KEY_REG]: {},
+    [KEY_ALERT]: {}
+  };
+
+  // Garante que o doc exista
+  async function ensureDoc() {
+    await setDoc(stateRef, { [KEY_DATA]: "", [KEY_REG]: {}, [KEY_ALERT]: {} }, { merge: true });
+  }
+
+  // Listener em tempo real
+  await ensureDoc();
+  onSnapshot(stateRef, (snap) => {
+    const data = snap.exists() ? snap.data() : {};
+
+    appState = {
+      [KEY_DATA]: data[KEY_DATA] || "",
+      [KEY_REG]: data[KEY_REG] || {},
+      [KEY_ALERT]: data[KEY_ALERT] || {}
+    };
+
+    // Atualiza data na tela (sem brigar)
+    if (inputData.value !== appState[KEY_DATA]) {
+      inputData.value = appState[KEY_DATA] || "";
+    }
+
+    // Re-renderiza tudo com o estado mais recente
+    carregar();
+  });
+
+  function normalizarAlertasDia(valor){
+    if(Array.isArray(valor)) return valor;
+    if(typeof valor === 'string' && valor.trim()) return [valor];
+    return [];
+  }
+
+  // ===== "GET/SAVE" agora via Firestore (mantendo nomes) =====
+  function getRegs(){ return appState[KEY_REG] || {}; }
+  async function salvarRegs(r){
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(stateRef);
+      const cur = snap.exists() ? snap.data() : {};
+      tx.set(stateRef, { ...cur, [KEY_REG]: r }, { merge: true });
+    });
+  }
+
+  function getAlertas(){ return appState[KEY_ALERT] || {}; }
+  async function salvarAlertas(a){
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(stateRef);
+      const cur = snap.exists() ? snap.data() : {};
+      tx.set(stateRef, { ...cur, [KEY_ALERT]: a }, { merge: true });
+    });
+  }
+
+  // DATA (Firestore)
+  inputData.onchange = async () => {
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(stateRef);
+      const cur = snap.exists() ? snap.data() : {};
+      tx.set(stateRef, { ...cur, [KEY_DATA]: inputData.value || "" }, { merge: true });
+    });
+    fecharInputAlerta();
+  };
+
+  // ===== ALERTAS =====
+  function abrirInputAlerta(texto='', index=null){
+    alertaEditIndex = index;
+    inputAlerta.style.display = 'block';
+    dicaAtalho.style.display = 'block';
+    inputAlerta.value = texto || '';
+    inputAlerta.focus();
+    inputAlerta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function fecharInputAlerta(){
+    inputAlerta.style.display = 'none';
+    dicaAtalho.style.display = 'none';
+    inputAlerta.value = '';
+    alertaEditIndex = null;
+  }
+
+  btnAbrirAlerta.onclick = () => {
+    const data = inputData.value;
+    if(!data){ alert("SELECIONE UMA DATA!"); inputData.focus(); return; }
+    abrirInputAlerta('', null);
+  };
+
+  // SHIFT+ENTER salva
+  inputAlerta.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter' && e.shiftKey) {
+      e.preventDefault();
+      const data = inputData.value;
+      if(!data){ alert("SELECIONE UMA DATA!"); inputData.focus(); return; }
+
+      const texto = inputAlerta.value.trim();
+      if(!texto){ fecharInputAlerta(); return; }
+
+      const alertas = structuredClone(getAlertas());
+      const lista = normalizarAlertasDia(alertas[data]);
+
+      if(alertaEditIndex === null){
+        lista.unshift(texto);
+      } else {
+        lista[alertaEditIndex] = texto;
+      }
+
+      alertas[data] = lista;
+      await salvarAlertas(alertas);
+      fecharInputAlerta();
+    }
+  });
+
+  function renderAlertas(){
+    const data = inputData.value;
+    const alertas = getAlertas();
+    const lista = normalizarAlertasDia(alertas[data]);
+
+    alertasWrap.innerHTML = '';
+    if(!data || lista.length === 0) return;
+
+    lista.forEach((texto, idx) => {
+      const box = document.createElement('div');
+      box.className = 'alerta-item';
+
+      box.innerHTML = `
+        <div>🚨 ${texto}</div>
+        <div class="alerta-actions">
+          <button class="smallbtn" type="button" data-act="edit" data-idx="${idx}">EDITAR</button>
+          <button class="smallbtn" type="button" data-act="del" data-idx="${idx}">REMOVER</button>
+        </div>
+      `;
+
+      box.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button');
+        if(!btn) return;
+
+        const act = btn.dataset.act;
+        const i = Number(btn.dataset.idx);
+
+        if(act === 'edit'){
+          abrirInputAlerta(lista[i], i);
+        }
+
+        if(act === 'del'){
+          const alertas2 = structuredClone(getAlertas());
+          const lista2 = normalizarAlertasDia(alertas2[data]);
+          lista2.splice(i, 1);
+          alertas2[data] = lista2;
+          await salvarAlertas(alertas2);
+          fecharInputAlerta();
+        }
+      });
+
+      alertasWrap.appendChild(box);
+    });
+  }
+
+  // ===== REGISTROS =====
+  function carregar(){
+    dados.innerHTML = '';
+
+    renderAlertas();
+
+    const data = inputData.value;
+    const regs = getRegs();
+
+    (regs[data] || []).forEach((r, i) => {
+      const d = document.createElement('div');
+      d.className = 'info';
+
+      d.innerHTML = `
+        <div class="time">${r.horario || ''}</div>
+        <div class="topo">${(r.prefixo || '')} ${(r.unidade || '')} - ${(r.status || '')}</div>
+
+        <div class="meta">
+          ${r.qru ? `<div class="line"><b>QRU</b>${r.qru}</div>` : ''}
+          ${r.qth ? `<div class="line"><b>QTH</b>${r.qth}</div>` : ''}
+          ${r.caracteristicas ? `<div class="line"><b>CARACTERÍSTICAS</b>${r.caracteristicas}</div>` : ''}
+        </div>
+
+        <div class="sel">
+          <input type="checkbox" data-i="${i}">
+          SELECIONAR
+          <button class="toggle" type="button">▼</button>
+        </div>
+
+        <div class="edit-panel">
+          <input class="edit-field" value="${r.prefixo || ''}">
+          <input class="edit-field" value="${r.unidade || ''}">
+          <input class="edit-field" value="${r.status || ''}">
+          <textarea class="edit-field">${r.qru || ''}</textarea>
+          <textarea class="edit-field">${r.qth || ''}</textarea>
+          <textarea class="edit-field">${r.caracteristicas || ''}</textarea>
+
+          <div class="actions">
+            <button class="btn primary" type="button">SALVAR</button>
+            <button class="btn danger" type="button">CANCELAR</button>
+          </div>
+        </div>
+      `;
+
+      const cb = d.querySelector('input[type="checkbox"]');
+      const toggle = d.querySelector('.toggle');
+      const panel = d.querySelector('.edit-panel');
+
+      cb.onchange = () => {
+        d.classList.toggle('selecionado', cb.checked);
+        toggle.style.display = cb.checked ? 'inline-block' : 'none';
+        if(!cb.checked){
+          panel.style.display = 'none';
+          toggle.textContent = '▼';
+        }
+      };
+
+      toggle.onclick = () => {
+        const aberto = panel.style.display === 'block';
+        panel.style.display = aberto ? 'none' : 'block';
+        toggle.textContent = aberto ? '▼' : '▲';
+      };
+
+      d.querySelector('.primary').onclick = async () => {
+        const f = d.querySelectorAll('.edit-field');
+
+        const regs2 = structuredClone(getRegs());
+        const lista = Array.isArray(regs2[data]) ? regs2[data] : [];
+
+        lista[i] = {
+          horario: r.horario,
+          prefixo: f[0].value,
+          unidade: f[1].value,
+          status: f[2].value,
+          qru: f[3].value,
+          qth: f[4].value,
+          caracteristicas: f[5].value
+        };
+
+        regs2[data] = lista;
+        await salvarRegs(regs2);
+      };
+
+      d.querySelector('.danger').onclick = () => carregar();
+
+      dados.appendChild(d);
+    });
+  }
+
+  async function excluirSelecionados(){
+    const data = inputData.value;
+    const regs2 = structuredClone(getRegs());
+
+    const checks = [...document.querySelectorAll('input[type=checkbox]:checked')].map(c => +c.dataset.i);
+    regs2[data] = (regs2[data] || []).filter((_, i) => !checks.includes(i));
+
+    await salvarRegs(regs2);
+  }
+
+  btnApagar.addEventListener("click", () => excluirSelecionados());
+
+  // primeira renderização (snapshot já chama carregar também, mas não custa)
+  carregar();
+</script>
+</body>
+</html>

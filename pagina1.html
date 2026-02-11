@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PÁGINA 1 - REGISTRO</title>
+
+  <style>
+  :root{
+    --bg: #c40000;
+    --panel: #000;
+    --text: #fff;
+    --muted: rgba(255,255,255,.72);
+    --border: rgba(255,255,255,.20);
+
+    --maxw: 620px;
+
+    --radius: 14px;
+    --pad: 10px;
+
+    --label: 12px;
+    --inputFont: clamp(22px, 2.2vw, 34px);
+    --btnFont: 14px;
+
+    --btnBg: #fff;
+    --btnText: #000;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    padding: 12px;
+    text-transform: uppercase;
+    letter-spacing: .35px;
+  }
+
+  .container{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding-bottom: 70px;
+  }
+
+  .panel{
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--pad);
+  }
+
+  .topbar{
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+  }
+
+  label{
+    font-weight: 1000;
+    display: block;
+    margin-bottom: 6px;
+    font-size: var(--label);
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .hint{
+    font-size: 11px;
+    opacity: .9;
+    text-transform: none;
+    letter-spacing: 0;
+    text-align: center;
+    color: rgba(255,255,255,.65);
+    margin-top: 4px;
+  }
+
+  .field{
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #000;
+    color: #fff;
+    font-weight: 1000;
+    padding: 10px 12px;
+    min-height: 44px;
+    outline: none;
+    text-align: center;
+    font-size: var(--inputFont);
+    line-height: 1.15;
+  }
+
+  .field:focus{
+    outline: 3px solid rgba(255,255,255,.9);
+    outline-offset: 2px;
+  }
+
+  textarea.field{
+    min-height: 62px;
+    resize: vertical;
+    text-align: center;
+  }
+
+  fieldset{ border:0; padding:0; margin:0; }
+
+  legend{
+    font-weight: 1000;
+    margin-bottom: 8px;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  .linha-unidade{
+    display: grid;
+    grid-template-columns: 90px 1fr 1fr;
+    gap: 8px;
+    align-items: start;
+  }
+
+  @media (max-width: 640px){
+    .linha-unidade{ grid-template-columns: 1fr; }
+  }
+
+  .linha-campo{
+    display: grid;
+    gap: 6px;
+    margin: 10px 0;
+    justify-items: center;
+  }
+
+  .rotulo{
+    width: 100%;
+    text-align: center;
+    font-weight: 1000;
+    color: #fff;
+    font-size: 14px;
+  }
+
+  .actions{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .button{
+    padding: 10px 14px;
+    background: var(--btnBg);
+    color: var(--btnText);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 1000;
+    font-size: var(--btnFont);
+    text-transform: uppercase;
+  }
+
+  .button.secondary{
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.45);
+    color: #fff;
+  }
+
+  .nav-button{
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    background: #fff;
+    color: #000;
+    font-weight: 1000;
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.35);
+    z-index: 50;
+  }
+
+  .grupo-registro{
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: var(--radius);
+    padding: 10px;
+    margin-top: 10px;
+    background: #000;
+  }
+  #gruposContainer .grupo-registro:nth-child(even){
+    background: #cfcfcf;
+  }
+  #gruposContainer .grupo-registro:nth-child(even) label,
+  #gruposContainer .grupo-registro:nth-child(even) .rotulo,
+  #gruposContainer .grupo-registro:nth-child(even) legend{
+    color: #000 !important;
+  }
+  #gruposContainer .grupo-registro:nth-child(even) .field{
+    color: #fff !important;
+  }
+
+  .lateral{
+    position: fixed;
+    top: 120px;
+    bottom: 120px;
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .lateral img{
+    width: 140px;
+    height: auto;
+    opacity: 0.9;
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,.6));
+  }
+  .lateral.esquerda{ left: 16px; }
+  .lateral.direita{ right: 16px; }
+
+  @media (max-width: 900px){
+    .lateral{ display: none; }
+  }
+
+  .assinatura{
+    position: fixed;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,.6);
+    letter-spacing: 0.6px;
+    z-index: 999;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  body.telao { zoom: 0.92; }
+  body.telao-grande { zoom: 0.98; }
+  body.telao-pequeno { zoom: 0.86; }
+
+  @supports not (zoom: 1) {
+    body.telao { transform: scale(0.92); transform-origin: top center; }
+    body.telao-grande { transform: scale(0.98); transform-origin: top center; }
+    body.telao-pequeno { transform: scale(0.86); transform-origin: top center; }
+  }
+
+  .telao-ui{
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 2000;
+    font-family: Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .35px;
+  }
+
+  .telao-ui .btn{
+    background: rgba(0,0,0,.85);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-weight: 1000;
+    cursor: pointer;
+  }
+
+  .telao-ui .panel{
+    margin-top: 8px;
+    background: rgba(0,0,0,.88);
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 14px;
+    padding: 10px;
+    display: none;
+    min-width: 220px;
+  }
+
+  .telao-ui.open .panel{ display: block; }
+
+  .telao-ui .row{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .telao-ui .opt{
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    padding: 8px 10px;
+    font-weight: 1000;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .telao-ui .opt.active{
+    border-color: rgba(255,255,255,.7);
+    background: rgba(255,255,255,.16);
+  }
+
+  .telao-ui .hint{
+    margin-top: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,.7);
+    text-align: center;
+  }
+
+  .field:focus{ text-transform: none !important; }
+  .field:not(:focus){ text-transform: uppercase; }
+  </style>
+</head>
+
+<body>
+  <!-- LOGOS LATERAIS - PAGINA 1 -->
+  <div class="lateral esquerda">
+    <img src="imgb1.png" alt="Logo B Página 1">
+  </div>
+  <div class="lateral direita">
+    <img src="imgb1.png" alt="Logo B Página 1">
+  </div>
+
+  <!-- CONTROLE MODO TELÃO -->
+  <div class="telao-ui" id="telaoUI">
+    <button class="btn" type="button" id="telaoBtn">MODO TELÃO</button>
+    <div class="panel">
+      <div class="row" style="margin-bottom:8px;">
+        <button class="opt" type="button" data-mode="off">OFF</button>
+        <button class="opt" type="button" data-mode="telao">TELÃO</button>
+        <button class="opt" type="button" data-mode="telao-grande">TELÃO-GRANDE</button>
+        <button class="opt" type="button" data-mode="telao-pequeno">TELÃO-PEQUENO</button>
+      </div>
+      <div class="hint">FICA SALVO AUTOMATICAMENTE</div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- TOPO -->
+    <section class="panel topbar">
+      <div style="width:100%; max-width: 360px;">
+        <label for="dataSelecionada">DATA DO REGISTRO</label>
+        <input type="date" id="dataSelecionada" class="field" />
+        <div class="hint">A DATA FICA SALVA AUTOMATICAMENTE.</div>
+      </div>
+
+      <button type="button" class="button" id="adicionarGrupo">+ ADICIONAR GRUPO</button>
+    </section>
+
+    <!-- GRUPOS -->
+    <section class="panel" style="width:100%;">
+      <div id="gruposContainer" aria-live="polite"></div>
+    </section>
+
+    <a href="pagina2.html" class="nav-button" aria-label="IR PARA VISUALIZAÇÃO">
+      📄 VISUALIZAÇÃO
+    </a>
+  </main>
+
+  <footer class="assinatura">
+    SISTEMA DE APOIO DESENVOLVIDO: SD PM 154.466-7 ANDERSON SILVA
+  </footer>
+
+  <!-- ===== FIREBASE + ESPALHAMENTO (TEMPO REAL) ===== -->
+  <script type="module">
+    // --------- (1) BLOQUEIO SIMPLES DO SEU INDEX (opcional) ----------
+    // Se você ainda estiver usando login simples VDM/1234 no index:
+    const AUTH_KEY = "vdm_auth_ok";
+    if (localStorage.getItem(AUTH_KEY) !== "1") {
+      window.location.href = "index.html";
+    }
+
+    // --------- (2) FIREBASE IMPORTS ----------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getFirestore, doc, onSnapshot, runTransaction, setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import {
+      getAuth, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    // --------- (3) COLE SEU firebaseConfig AQUI ----------
+    // Firebase Console > Project settings > Your apps (Web) > Firebase SDK snippet (Config)
+    const firebaseConfig = {
+      // apiKey: "...",
+      // authDomain: "...",
+      // projectId: "...",
+      // storageBucket: "...",
+      // messagingSenderId: "...",
+      // appId: "..."
+    };
+
+    // --------- (4) INIT ----------
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Documento central compartilhado (todo mundo vê em tempo real)
+    // Você pode mudar o nome se quiser, mas deixe igual nas páginas 1 e 2.
+    const stateRef = doc(db, "vdm", "state");
+
+    // Se você ativar Firebase Auth (recomendado), a página exige estar logado de verdade:
+    onAuthStateChanged(auth, (user) => {
+      // Se você AINDA não configurou Auth no Firebase, comente esse bloco.
+      if (!user) {
+        // volta pro index (onde você fará o login do Firebase depois)
+        // (se ainda não mexeu no index pro Firebase, pode comentar essa linha)
+        // window.location.href = "index.html";
+      }
+    });
+
+    // --------- (5) SEU CÓDIGO ORIGINAL (agora com Firestore) ----------
+    const campoData = document.getElementById('dataSelecionada');
+    const gruposContainer = document.getElementById('gruposContainer');
+    const btnAdicionar = document.getElementById('adicionarGrupo');
+
+    // Mantive esses nomes pra não quebrar nada mentalmente:
+    const STORAGE_DATA_KEY = 'dataSelecionada';
+    const STORAGE_REG_KEY = 'registrosPorDia';
+
+    // Estado local em memória (sempre refletindo o Firestore)
+    let appState = {
+      [STORAGE_DATA_KEY]: "",
+      [STORAGE_REG_KEY]: {}
+    };
+
+    // Cria doc inicial se não existir (uma vez)
+    async function ensureDoc() {
+      await setDoc(stateRef, { [STORAGE_DATA_KEY]: "", [STORAGE_REG_KEY]: {} }, { merge: true });
+    }
+
+    // Listener em tempo real: qualquer PC que salvar → todos recebem aqui
+    ensureDoc().then(() => {
+      onSnapshot(stateRef, (snap) => {
+        const data = snap.exists() ? snap.data() : {};
+        appState = {
+          [STORAGE_DATA_KEY]: data[STORAGE_DATA_KEY] || "",
+          [STORAGE_REG_KEY]: data[STORAGE_REG_KEY] || {}
+        };
+
+        // Atualiza o campo de data na tela sem “brigar” com o usuário
+        if (campoData.value !== appState[STORAGE_DATA_KEY]) {
+          campoData.value = appState[STORAGE_DATA_KEY] || "";
+        }
+      });
+    });
+
+    // Substitutos do LocalStorage (mantém o resto igual)
+    function getRegistros() {
+      return appState[STORAGE_REG_KEY] || {};
+    }
+
+    async function setRegistros(obj) {
+      // Salva no Firestore (espelha nos outros PCs)
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(stateRef);
+        const current = snap.exists() ? snap.data() : {};
+        tx.set(stateRef, { ...current, [STORAGE_REG_KEY]: obj }, { merge: true });
+      });
+    }
+
+    // DATA (agora vai pro Firestore)
+    campoData.addEventListener('change', async () => {
+      const nova = campoData.value || "";
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(stateRef);
+        const current = snap.exists() ? snap.data() : {};
+        tx.set(stateRef, { ...current, [STORAGE_DATA_KEY]: nova }, { merge: true });
+      });
+    });
+
+    function criarGrupo() {
+      const form = document.createElement('form');
+      form.className = 'grupo-registro';
+      form.noValidate = true;
+
+      const idGrupo = String(Date.now());
+
+      form.innerHTML = `
+        <fieldset>
+          <legend>REGISTRO</legend>
+
+          <div class="linha-unidade">
+            <div>
+              <label for="prefixo-${idGrupo}">PREFIXO</label>
+              <input id="prefixo-${idGrupo}" name="prefixo" type="text" class="field"
+                     maxlength="3" inputmode="numeric" aria-label="PREFIXO" />
+            </div>
+
+            <div>
+              <label for="unidade-${idGrupo}">UNIDADE</label>
+              <select id="unidade-${idGrupo}" name="unidade" class="field">
+                <option value="º BPM/M">º BPM/M</option>
+                <option value="º CPTRAN">º CPTRAN</option>
+                <option value="º CHOQUE">º CHOQUE</option>
+                <option value="º BAEP">º BAEP</option>
+                <option value="º RODOVIÁRIA">º RODOVIÁRIA</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="status-${idGrupo}">COP</label>
+              <select id="status-${idGrupo}" name="status" class="field">
+                <option value="➡️">➡️</option>
+                <option value="⬅️">⬅️</option>
+                <option value="⬅️➡️">⬅️➡️</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="linha-campo">
+            <div class="rotulo">QRU</div>
+            <textarea id="qru-${idGrupo}" name="qru" class="field" spellcheck="true" lang="pt-BR"></textarea>
+          </div>
+
+          <div class="linha-campo">
+            <div class="rotulo">QTH</div>
+            <textarea id="qth-${idGrupo}" name="qth" class="field" spellcheck="true" lang="pt-BR"></textarea>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="button">REGISTRAR</button>
+            <button type="button" class="button secondary" data-action="remover">REMOVER GRUPO</button>
+          </div>
+        </fieldset>
+      `;
+
+      // remover grupo (não mexe no banco, só remove o formulário da tela)
+      form.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action="remover"]');
+        if (!btn) return;
+        form.remove();
+      });
+
+      // salvar registro (AGORA NO FIRESTORE)
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = campoData.value;
+        if (!data) {
+          alert('SELECIONE UMA DATA!');
+          campoData.focus();
+          return;
+        }
+
+        const fd = new FormData(form);
+        const registro = {
+          horario: new Date().toLocaleTimeString('pt-BR'),
+          prefixo: (fd.get('prefixo') || '').toString().trim(),
+          unidade: (fd.get('unidade') || '').toString(),
+          status: (fd.get('status') || '').toString(),
+          qru: (fd.get('qru') || '').toString().trim(),
+          qth: (fd.get('qth') || '').toString().trim(),
+        };
+
+        // Transação para não perder dados se outro PC salvar ao mesmo tempo
+        await runTransaction(db, async (tx) => {
+          const snap = await tx.get(stateRef);
+          const current = snap.exists() ? snap.data() : {};
+          const registros = (current[STORAGE_REG_KEY] || {});
+
+          const lista = Array.isArray(registros[data]) ? registros[data] : [];
+          registros[data] = [registro, ...lista];
+
+          tx.set(stateRef, { ...current, [STORAGE_REG_KEY]: registros }, { merge: true });
+        });
+
+        form.reset();
+      });
+
+      return form;
+    }
+
+    btnAdicionar.addEventListener('click', () => {
+      gruposContainer.appendChild(criarGrupo());
+    });
+
+    /* ===== CONTROLE MODO TELÃO (LOCAL - cada PC pode ter seu modo) ===== */
+    (() => {
+      const KEY = "modoTelao";
+      const ui = document.getElementById("telaoUI");
+      const btn = document.getElementById("telaoBtn");
+      const opts = ui.querySelectorAll(".opt");
+
+      function limparClasses() {
+        document.body.classList.remove("telao", "telao-grande", "telao-pequeno");
+      }
+
+      function aplicarModo(mode) {
+        limparClasses();
+
+        if (mode === "off" || !mode) {
+          localStorage.setItem(KEY, "off");
+        } else {
+          document.body.classList.add(mode);
+          localStorage.setItem(KEY, mode);
+        }
+
+        opts.forEach(b => b.classList.toggle("active", b.dataset.mode === (mode || "off")));
+      }
+
+      btn.addEventListener("click", () => ui.classList.toggle("open"));
+
+      document.addEventListener("click", (e) => {
+        if (!ui.contains(e.target)) ui.classList.remove("open");
+      });
+
+      opts.forEach(b => {
+        b.addEventListener("click", () => {
+          aplicarModo(b.dataset.mode);
+          ui.classList.remove("open");
+        });
+      });
+
+      aplicarModo(localStorage.getItem(KEY) || "off");
+    })();
+  </script>
+</body>
+</html>
