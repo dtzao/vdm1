@@ -419,6 +419,16 @@
     const campoData = document.getElementById('dataSelecionada');
     const gruposContainer = document.getElementById('gruposContainer');
     const btnAdicionar = document.getElementById('adicionarGrupo');
+// ===== AJUDA: abrir calendário + evitar “trocar a data enquanto você escolhe” =====
+let editandoData = false;
+
+campoData.addEventListener('focus', () => editandoData = true);
+campoData.addEventListener('blur',  () => editandoData = false);
+
+// abre o calendário ao clicar (quando o navegador suporta)
+campoData.addEventListener('click', () => {
+  if (campoData.showPicker) campoData.showPicker();
+});
 
     // Mantive esses nomes pra não quebrar nada mentalmente:
     const STORAGE_DATA_KEY = 'dataSelecionada';
@@ -453,8 +463,9 @@
         };
 
         // Atualiza o campo de data na tela sem “brigar” com o usuário
-        if (campoData.value !== appState[STORAGE_DATA_KEY]) {
-          campoData.value = appState[STORAGE_DATA_KEY] || "";
+        if (!editandoData) {
+  const nova = appState[STORAGE_DATA_KEY] || "";
+  if (campoData.value !== nova) campoData.value = nova;
         }
       });
     });
@@ -631,5 +642,6 @@
   </script>
 </body>
 </html>
+
 
 
