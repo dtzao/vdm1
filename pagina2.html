@@ -394,7 +394,17 @@ label{
   // --------- (3) ELEMENTOS / CHAVES ----------
   const inputData = document.getElementById('dataSelecionada');
   const dados = document.getElementById('dados');
+// ===== AJUDA: abrir calendário + evitar troca enquanto edita =====
+let editandoData = false;
 
+inputData.addEventListener('focus', () => editandoData = true);
+inputData.addEventListener('blur',  () => editandoData = false);
+
+// abre o calendário ao clicar (quando suportado)
+inputData.addEventListener('click', () => {
+  if (inputData.showPicker) inputData.showPicker();
+});
+  
   const alertasWrap = document.getElementById('alertasWrap');
   const inputAlerta = document.getElementById('inputAlerta');
   const btnAbrirAlerta = document.getElementById('btnAbrirAlerta');
@@ -440,9 +450,10 @@ label{
     };
 
     // Atualiza data na tela (sem brigar)
-    if (inputData.value !== appState[KEY_DATA]) {
-      inputData.value = appState[KEY_DATA] || "";
-    }
+    if (!editandoData) {
+  const nova = appState[KEY_DATA] || "";
+  if (inputData.value !== nova) inputData.value = nova;
+}
 
     // Re-renderiza tudo com o estado mais recente
     carregar();
@@ -682,5 +693,6 @@ label{
 </script>
 </body>
 </html>
+
 
 
