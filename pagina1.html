@@ -432,8 +432,16 @@
 
     // Cria doc inicial se não existir (uma vez)
     async function ensureDoc() {
-      await setDoc(stateRef, { [STORAGE_DATA_KEY]: "", [STORAGE_REG_KEY]: {} }, { merge: true });
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(stateRef);
+    if (!snap.exists()) {
+      tx.set(stateRef, {
+        [STORAGE_DATA_KEY]: "",
+        [STORAGE_REG_KEY]: {}
+      });
     }
+  });
+}
 
     // Listener em tempo real: qualquer PC que salvar → todos recebem aqui
     ensureDoc().then(() => {
@@ -623,4 +631,5 @@
   </script>
 </body>
 </html>
+
 
