@@ -416,8 +416,17 @@ label{
 
   // Garante que o doc exista
   async function ensureDoc() {
-    await setDoc(stateRef, { [KEY_DATA]: "", [KEY_REG]: {}, [KEY_ALERT]: {} }, { merge: true });
-  }
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(stateRef);
+    if (!snap.exists()) {
+      tx.set(stateRef, {
+        [KEY_DATA]: "",
+        [KEY_REG]: {},
+        [KEY_ALERT]: {}
+      });
+    }
+  });
+}
 
   // Listener em tempo real
   await ensureDoc();
@@ -673,4 +682,5 @@ label{
 </script>
 </body>
 </html>
+
 
